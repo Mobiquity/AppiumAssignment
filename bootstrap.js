@@ -79,8 +79,8 @@ else { // Run the test locally
     exports.desired = {
         name:"3rb POC - authentication suite",
         browserName:"ipad",
-        platform:"OS X 10.8",
-        version:"6.0",
+        platform:"OS X 10.9.2",
+        version:"6.1",
         deviceName:"iPad Simulator",
         app:pathToProject
     };

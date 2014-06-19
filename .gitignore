@@ -2,6 +2,8 @@
 logs
 *.log
 
+SauceResults.xml
+
 # Runtime data
 pids
 *.pid

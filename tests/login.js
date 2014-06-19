@@ -37,30 +37,32 @@ describe('3RB Login - Open Browser', function() {
 	});
 
 
-    describe('3RB Authentication Tests', function() {
-        this.timeout(bootstrap.MaxWaittime); // To get the app open in the emulator
-
-        before(function(done) {
-            login = new loginPage(browser);
-            done();
+    it('C8033 - Valid Login', function(done) {
+        login.validLogin(function(err) {
+            if(err) {
+                done(err);
+            }
+            else {
+                login.logout(function(err) {
+                    done(err)
+                });
+            }
         });
+    });
 
-        it('C8033 - Valid Login', function(done) {
-            login.validLogin(function(err) {
-                if(err) {
-                    done(err);
-                }
-                else {
-                    login.logout(function(err) {
-                        done(err)
-                    });
-                }
-            });
-        });
 
-        // TODO: Add it's for negative login tests
+    // describe('3RB Authentication Tests', function() {
+    //     this.timeout(bootstrap.MaxWaittime); // To get the app open in the emulator
 
-    });  // Login test Describes
+    //     before(function(done) {
+    //         login = new loginPage(browser);
+    //         done();
+    //     });
+
+
+    //     // TODO: Add it's for negative login tests
+
+    // });  // Login test Describes
 }); // File Describe
 
 

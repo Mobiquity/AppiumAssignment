@@ -1,7 +1,7 @@
 {
-  "name": "appiumIosFramework",
+  "name": "SpiderLMSSelenium",
   "version": "0.0.1",
-  "description": "Basic framework to test an iOS app",
+  "description": "Functional Selenium tests",
   "main": "bootstrap.js",
   "directories": {
     "test": "tests"
@@ -15,20 +15,22 @@
     "custom-logger": "~0.2.1",
     "wd": "~0.2.27",
     "mocha": "~1.20.1",
-    "mocha-jenkins-reporter": "~0.1.0"
+    "selenium-standalone": "~2.42.0-2.9.0-1",
+    "jquery": "~2.1.1",
+    "xmldom": "~0.1.19"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "./node_modules/.bin/mocha --recursive -R xunit tests/ > test-reports.xml"
+    "test": "./node_modules/.bin/mocha --recursive -R xunit scripts/ > test-reports.xml"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Mobiquity/Automation.git"
+    "url": "git@github.com:Mobiquity/MobSource_SpiderLMS_Web.git"
   },
   "author": "Elise",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/Mobiquity/Automation/issues"
+    "url": "https://github.com/Mobiquity/MobSource_SpiderLMS_Web/issues"
   },
-  "homepage": "https://github.com/Mobiquity/Automation"
+  "homepage": "https://github.com/Mobiquity/MobSource_SpiderLMS_Web"
 }

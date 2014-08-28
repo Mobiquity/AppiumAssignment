@@ -1,39 +1,51 @@
-"use strict";
-
-require('colors');
+var wd = require('wd');
+var fs = require('fs');
 var chai = require("chai");
+require("colors");
+
+var Settings = require('./testenvironment');
+
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 chai.should();
-var wd = require('wd');
+chaiAsPromised.transferPromiseness = wd.transferPromiseness;
 
-exports.log = require('custom-logger').config({ level: 0 });
+exports.log = require('custom-logger').config({ level: Settings.loglevelmin });
 exports.log.info().config({ color: 'green', format: '%event% - %message%' });
+exports.MaxWaitTime = Settings.maxwaittime;
 
-exports.MaxWaitTime = 120000;
+if(Settings.onsauce) {
+    exports.log.info("Running on sauce");
+    exports.browser = wd.promiseChainRemote(Settings.sauce.host, Settings.sauce.port, Settings.sauce.username, Settings.sauce.accesskey);
 
+    exports.desired = {
+        name:Settings.sauce.name,
+        browserName:Settings.sauce.browserName,
+        platform:Settings.sauce.platform,
+        version:Settings.sauce.version,
+        deviceName:Settings.sauce.deviceName,
+        app:Settings.sauce.path
+    };
+    exports.desired['appium-version'] = Settings.sauce['appium-version'];
+}
+else {
+    exports.log.info("Running locally");
+    exports.browser = wd.promiseChainRemote(Settings.local.host, Settings.local.port);
 
-///////////////////////////////////////////////////////////////////////////
-// TODO: EDIT THIS DEPENDING ON WHERE YOU ARE RUNNING THE THING
-// MAKE SURE THAT YOUR LOCAL PATH IS SPECIFIC TO YOUR MACHINE
-// TODO: PUT THIS IN A CONFIG FILE THAT IS NOT IN GITHUB
-///////////////////////////////////////////////////////////////////////////
-var onSauce = false;
-var localProjectPath = "/Users/ecarmichael/Library/Developer/Xcode/DerivedData/3rbPOC-ccxhuumqhwbwtvheqaptxtykuayq/Build/Products/Debug-iphonesimulator/3rbPOC.app";
-//var localProjectPath = "/Users/sidar/Library/Developer/Xcode/DerivedData/3rbPOC-eqdzbgrjsbmxkchidgaxuaqnyitm/Build/Products/Debug-iphonesimulator/3rbPOC.app";
-var sauceProjectPath = "sauce-storage:3rbPOC.zip";
-
-var nameOfTestLinkFile = "SauceResults.xml";
-
-var host = "localhost";
-var port = 4723; 
-var pathToProject;
-//var localProjectPath = "/Users/sidar/Library/Developer/Xcode/DerivedData/3rbPOC-eqdzbgrjsbmxkchidgaxuaqnyitm/Build/Products/Debug-iphonesimulator/3rbPOC.app";
-
-var fs = require('fs');
+    exports.desired = {
+        name:Settings.local.name,
+        //browserName:Settings.local.browserName,
+        platform:Settings.local.platform,
+        platformName:Settings.local.platform,
+        version:Settings.local.version,
+        deviceName:Settings.local.deviceName,
+        app:Settings.local.path
+    };
+    exports.desired['appium-version'] = Settings.sauce['appium-version'];
+}
 
 exports.writeToFile = function(content) {
-    fs.appendFile(nameOfTestLinkFile, content + "\n\n", function(err) {
+    fs.appendFile(Settings.resultsFile, content + "\n\n", function(err) {
         if(err) {
             exports.log.warn(err);
         } else {
@@ -42,49 +54,25 @@ exports.writeToFile = function(content) {
     }); 
 }
 
-fs.unlink(nameOfTestLinkFile, function(err) {
+exports.HandleErrors = function(itDidNotWorkCB, itWorkedCB) {
+    return function (err, other) {
+        if (err) {
+            itDidNotWorkCB("oops" + err);
+        }
+        else {
+            itWorkedCB(null, other);
+        }
+    }
+}
+
+fs.unlink(Settings.resultsFile, function(err) {
     if(err) {
         exports.log.warn(err);
     } else {
         exports.log.info("The test link file was removed!");
     }
 });
-    
+
+exports.settings = Settings;
 exports.writeToFile("Sauce Test Reults");
 
-
-if(onSauce) {
-    host = 'ondemand.saucelabs.com';
-    port = 80;
-    var username = 'mobiquity';
-    var accessKey = '75b72184-3f8d-45d5-ae04-8d79d2b06ccb';
-    pathToProject = sauceProjectPath;
-    exports.browser = wd.promiseChainRemote(host, port, username, accessKey);
-
-    exports.desired = {
-        name:"3rb POC - authentication suite",
-        browserName:"ipad",
-        platform:"OS X 10.8",
-        version:"6.0",
-        deviceName:"iPad Simulator",
-        app:pathToProject
-    };
-
-    exports.desired['appium-version'] = "1.0";
-}
-else { // Run the test locally
-    pathToProject = localProjectPath;
-    exports.browser = wd.promiseChainRemote(host, port);
-
-    exports.desired = {
-        name:"3rb POC - authentication suite",
-        browserName:"ipad",
-        platform:"OS X 10.9.2",
-        version:"6.1",
-        deviceName:"iPad Simulator",
-        app:pathToProject
-    };
-
-    exports.desired['appium-version'] = "1.0";
-
-}

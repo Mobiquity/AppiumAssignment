@@ -14,6 +14,10 @@ Assignment 1
 * Set up the "apple" to run the iPhone 4" 32bit
 * Run the appium "doctor" to see if everything looks Okay
 * Click Launch (starts the Appium server)
+* Clone this repo! 
+  * Run `npm install`
+  * Set the value in testenvironment.json -> local -> path to be the path to the .app file for MyOrder
+  * run the initial tests to see if it's configured correctly with `mocha scripts/functional/search.js`
 * Run the initial tests in the scripts/functional folder with `mocha scripts/functional/search.js`
 * When you have 1 passing, assignment done!
 

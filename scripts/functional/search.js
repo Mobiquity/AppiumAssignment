@@ -3,7 +3,9 @@ var browser = bootstrap.browser;
 var log = bootstrap.log;
 
 var tourPage = require('../../pages/tourPage');
+var homePage = require('../../pages/homePage');
 var tourScreen;
+var homeScreen;
 
 var sessionid;
 var sessionurl;
@@ -13,6 +15,7 @@ describe('My Order - Open & Search', function() {
 
     before(function(done) {
         tourScreen = new tourPage(browser);
+        homeScreen = new homePage(browser);
 
         log.info("About to run browser init with desired options");
         bootstrap.desired.name="My Order - Search Tests";
@@ -24,8 +27,6 @@ describe('My Order - Open & Search', function() {
 
                 sessionid = sid;
                 sessionurl = "https://saucelabs.com/tests/" + sid;
-
-                //bootstrap.writeToFile(bootstrap.desired.name + " - " + sessionurl);
             });
 
             return;
@@ -34,7 +35,7 @@ describe('My Order - Open & Search', function() {
     });
 
     after(function(done) {
-        browser.quit().nodeify(done);
+        //browser.quit().nodeify(done);
     });
     
     // it('Initiated', function(done) {
@@ -42,10 +43,19 @@ describe('My Order - Open & Search', function() {
     // });
 
     it('Should let me search', function(done) {
+        debugger;
         tourScreen.clickDoneAndDismissLocationServices(bootstrap.HandleErrors(done, function(err) {
-
+            log.info("About to click Home Screen search!");
             // TODO: Do the search!
-            done();
+            try {
+                homeScreen.clickSearch(done, function(err) {
+                    log.info("After click Search called?" + err);
+                    done();
+                })
+            }
+            catch(e) {
+                done("uncaught err: " + e);
+            }
         })); 
     })
 }); // Final Describe

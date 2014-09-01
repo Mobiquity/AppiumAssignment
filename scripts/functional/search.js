@@ -4,8 +4,10 @@ var log = bootstrap.log;
 
 var tourPage = require('../../pages/tourPage');
 var homePage = require('../../pages/homePage');
+var searchPage = require('../../pages/searchPage');
 var tourScreen;
 var homeScreen;
+var searchScreen;
 
 var sessionid;
 var sessionurl;
@@ -16,6 +18,7 @@ describe('My Order - Open & Search', function() {
     before(function(done) {
         tourScreen = new tourPage(browser);
         homeScreen = new homePage(browser);
+        searchScreen = new searchPage(browser);
 
         log.info("About to run browser init with desired options");
         bootstrap.desired.name="My Order - Search Tests";
@@ -35,7 +38,7 @@ describe('My Order - Open & Search', function() {
     });
 
     after(function(done) {
-        //browser.quit().nodeify(done);
+        browser.quit().nodeify(done);
     });
     
     // it('Initiated', function(done) {
@@ -43,20 +46,21 @@ describe('My Order - Open & Search', function() {
     // });
 
     it('Should let me search', function(done) {
-        debugger;
         tourScreen.clickDoneAndDismissLocationServices(bootstrap.HandleErrors(done, function(err) {
             log.info("About to click Home Screen search!");
-            // TODO: Do the search!
-            try {
-                homeScreen.clickSearch(done, function(err) {
-                    log.info("After click Search called?" + err);
-                    done();
+            homeScreen.clickSearch(bootstrap.HandleErrors(done, function(err) {
+                searchScreen.typeInSearch("Ams", function(err) {
+                    searchScreen.getFirstResultText(bootstrap.HandleErrors(done, function(err, firstResultText) {
+                        firstResultText.should.equal("Amsterdam");
+                        done();
+                    }))
                 })
-            }
-            catch(e) {
-                done("uncaught err: " + e);
-            }
+            }))   
         })); 
     })
+
+    // it('should work on inde.html with this param', function() {
+    //     browser.login("username", "password").title().should.become("Home Page");
+    // })
 }); // Final Describe
 

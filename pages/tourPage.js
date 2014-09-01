@@ -20,10 +20,10 @@ tourPage.prototype.clickDoneAndDismissLocationServices = function(done) {
         log.info("Found done button, about to click it");
         el.click(bs.HandleErrors(done, function(err) {
             log.info("About to acccept 'use location alert'");
-            browser.dismissAlert(bs.HandleErrors(done, function(err) {
-                log.info("Problem accepting alert? " + err);
-                done();
-            }));
+            // browser.dismissAlert(bs.HandleErrors(done, function(err) {
+            //     log.info("Problem accepting alert? " + err);
+                 done();
+            // }));
         }));
     }));
 }

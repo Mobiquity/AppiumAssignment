@@ -24,7 +24,8 @@ if(Settings.onsauce) {
         platform:Settings.sauce.platform,
         version:Settings.sauce.version,
         deviceName:Settings.sauce.deviceName,
-        app:Settings.sauce.path
+        app:Settings.sauce.path,
+        autoAcceptAlerts: true
     };
     exports.desired['appium-version'] = Settings.sauce['appium-version'];
 }
@@ -39,7 +40,8 @@ else {
         platformName:Settings.local.platform,
         version:Settings.local.version,
         deviceName:Settings.local.deviceName,
-        app:Settings.local.path
+        app:Settings.local.path,
+        autoAcceptAlerts: true
     };
     exports.desired['appium-version'] = Settings.sauce['appium-version'];
 }

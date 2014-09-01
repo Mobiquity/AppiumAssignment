@@ -5,7 +5,7 @@ var browser;
 
 // Page Elements Here
 var pageObjects = {
-	searchButtonXPath: "//UIAApplication[1]/UIAWindow[1]/UIATextField[1]"
+	searchButtonXPath: "//UIAApplication[1]/UIAWindow[1]/UIAButton[2]"
 };
 
 var homePage = function(theBrowser) {
@@ -17,7 +17,7 @@ var homePage = function(theBrowser) {
 
 homePage.prototype.clickSearch = function(done) {
     try {
-        debugger;
+        log.info("Looking for element");
         browser.waitForElementByXPath(pageObjects.searchButtonXPath, bs.HandleErrors(done, function(err, el) {
             log.info("Found search button, about to click it");
             el.click(bs.HandleErrors(done, function(err) {

@@ -17,16 +17,21 @@ var tourPage = function(theBrowser) {
 
 tourPage.prototype.clickDoneAndDismissLocationServices = function(done) {
     browser.waitForElementByName(pageObjects.doneName, bs.HandleErrors(done, function(err, el) {
-        log.info("Found done button, about to click it");
         el.click(bs.HandleErrors(done, function(err) {
-            log.info("About to acccept 'use location alert'");
             browser.dismissAlert(bs.HandleErrors(done, function(err) {
-                log.info("Problem accepting alert? " + err);
                 done();
             }));
         }));
     }));
 }
 
+tourPage.prototype.clickDoneAndDismissLocationServicesPromise = function() {
+    log.info("In clickDoneAndDismissLocationServicesPromise" + err);
+
+    return browser.waitForElementByName(pageObjects.doneName).then(function(err, el) {
+        log.info("In clickDoneAndDismissLocationServicesPromise - found element? " + err);
+        el.click().dismissAlert();;
+    })
+}
 
 module.exports = tourPage;
